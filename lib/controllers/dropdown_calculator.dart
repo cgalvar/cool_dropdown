@@ -48,10 +48,27 @@ class DropdownCalculator<T> {
     required this.dropdownTriangleOptions,
   });
 
+  Size getLogicalScreenSize(BuildContext context) {
+    final view = View.of(context);
+    final physicalSize = view.physicalSize;
+    final pixelRatio = view.devicePixelRatio;
+    return Size(physicalSize.width / pixelRatio, physicalSize.height / pixelRatio);
+  }
+
   Offset setOffset() {
+
+    final screenSize = getLogicalScreenSize(bodyContext);
+
     final resultBox = resultKey.currentContext?.findRenderObject() as RenderBox;
-    final resultOffset = resultBox.localToGlobal(Offset.zero);
+    final resultGlobalOffset = resultBox.localToGlobal(Offset.zero);
     _resultWidth = resultBox.size.width;
+
+    final MediaQueryData mediaQueryData = MediaQuery.of(bodyContext);
+
+    // Calculate the position relative to the MediaQuery-defined area (considering padding)
+    final Offset resultOffset = resultGlobalOffset.copyWith(
+      dy: resultGlobalOffset.dy - (screenSize.height - mediaQueryData.size.height),
+    );
 
     return Offset(
       _setOffsetDx(resultBox: resultBox, resultOffset: resultOffset),
