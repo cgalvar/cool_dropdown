@@ -66,8 +66,9 @@ class DropdownCalculator<T> {
     final MediaQueryData mediaQueryData = MediaQuery.of(bodyContext);
 
     // Calculate the position relative to the MediaQuery-defined area (considering padding)
-    final Offset resultOffset = resultGlobalOffset.copyWith(
-      dy: resultGlobalOffset.dy - (screenSize.height - mediaQueryData.size.height),
+    final Offset resultOffset = Offset(
+      resultGlobalOffset.dx, 
+      resultGlobalOffset.dy - (screenSize.height - mediaQueryData.size.height)
     );
 
     return Offset(
